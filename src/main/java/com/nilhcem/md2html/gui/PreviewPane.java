@@ -1,11 +1,18 @@
 package com.nilhcem.md2html.gui;
 
+import com.nilhcem.md2html.App;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.web.WebView;
+import org.pegdown.PegDownProcessor;
+
+import javax.swing.*;
+import java.io.*;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
-import com.petebevin.markdown.MarkdownProcessor;
+import java.util.stream.Collectors;
 
 /**
  * Scrolled text area where will be displayed the HTML preview.
@@ -14,15 +21,31 @@ import com.petebevin.markdown.MarkdownProcessor;
  * @since 1.0
  */
 public final class PreviewPane implements Observer {
-	private final JScrollPane previewPane = new JScrollPane();
-	private final JLabel previewLabel = new JLabel();
+	private JFXPanel javafxPanel;
+	private WebView webComponent;
+	private static String css;
 
 	/**
-	 * Creates the HTML JLabel and sets its vertical alignment as in the top.
+	 * Creates the HTML Pane and adds Github stylesheet
 	 */
 	public PreviewPane() {
-		previewLabel.setVerticalAlignment(JLabel.TOP);
-		previewPane.getViewport().add(previewLabel, null);
+		javafxPanel = new JFXPanel();
+
+		// Load style sheet into string for inclusion in HTML
+		InputStream is = Thread.currentThread().getContextClassLoader()
+				.getResourceAsStream("github-markdown.css");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		css = reader.lines().collect(Collectors.joining(System.getProperty("line.separator")));
+
+		Platform.runLater(() -> {
+            BorderPane borderPane = new BorderPane();
+            webComponent = new WebView();
+            webComponent.getEngine().loadContent("");
+            borderPane.setCenter(webComponent);
+            Scene scene = new Scene(borderPane,750,500);
+            javafxPanel.setScene(scene);
+        });
+
 	}
 
 	/**
@@ -30,12 +53,12 @@ public final class PreviewPane implements Observer {
 	 *
 	 * @return the JScrollPane object.
 	 */
-	public JScrollPane get() {
-		return previewPane;
+	public JFXPanel get() {
+		return javafxPanel;
 	}
 
 	/**
-	 * Updates the content of the label by converting the input data to html and setting them to the label.
+	 * Updates the content of the label by converting the input data to html and setting them to the JavaFX view
 	 * <p>
 	 * This method will be called by an {@code InputPane} observable.
 	 * </p>
@@ -46,14 +69,18 @@ public final class PreviewPane implements Observer {
 	@Override
 	public void update(final Observable o, final Object data) {
 		if (o instanceof InputPane) {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					String content = (String)data;
-					MarkdownProcessor processor = new MarkdownProcessor();
-					previewLabel.setText(String.format("<html>%s</html>", processor.markdown(content)).replaceAll("src=\"", "src=\"file:")); // Fix to display images properly.
-				}
-			});
+			SwingUtilities.invokeLater(() -> {
+                String content = (String)data;
+                PegDownProcessor processor = new PegDownProcessor(App.pegdownOptions);
+
+                Platform.runLater(() -> {
+String html = String.format("<html>" +
+		"<head><style>%s</style></head>" +
+		"<body>%s</body>" +
+		"</html>", PreviewPane.css, processor.markdownToHtml(content)).replaceAll("src=\"", "src=\"file:");
+webComponent.getEngine().loadContent(html);
+});
+            });
 		}
 	}
 }

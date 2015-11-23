@@ -2,6 +2,7 @@ package com.nilhcem.md2html;
 
 import java.io.File;
 
+import com.nilhcem.md2html.console.ArgsParser;
 import org.apache.commons.io.FilenameUtils;
 
 import com.nilhcem.md2html.console.ConsoleMode;
@@ -39,7 +40,12 @@ public class DoDir {
 				
 				System.out.println( "doM2h:" + files[i].getAbsolutePath());
 				try {
-					cm.process(files[i], new File(strOutputFile));
+					// Not tested change
+					ArgsParser ap = new ArgsParser();
+					String[] args = {""};
+					args[0] = files[i].getAbsolutePath();
+					ap.checkArgs(args);
+					cm.process(ap);
 					errFile.deleteOnExit();
 					System.out.println( "del errFile:" + errFile.getAbsolutePath());
 				} catch (Exception e) {

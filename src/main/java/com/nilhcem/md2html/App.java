@@ -1,12 +1,14 @@
 package com.nilhcem.md2html;
 
 import java.awt.EventQueue;
+import java.io.File;
 import java.io.FileNotFoundException;
 import javax.swing.UIManager;
 import com.nilhcem.md2html.console.ArgsParser;
 import com.nilhcem.md2html.console.ConsoleMode;
 import com.nilhcem.md2html.console.DisplayUsageException;
 import com.nilhcem.md2html.gui.MainFrame;
+import org.pegdown.Extensions;
 
 /**
  * Entry point of the application.
@@ -15,6 +17,21 @@ import com.nilhcem.md2html.gui.MainFrame;
  * @since 1.0
  */
 public final class App {
+	public static int pegdownOptions =
+			Extensions.ABBREVIATIONS
+			| Extensions.ATXHEADERSPACE
+			| Extensions.AUTOLINKS
+			| Extensions.DEFINITIONS
+			| Extensions.EXTANCHORLINKS
+			| Extensions.FENCED_CODE_BLOCKS
+			| Extensions.FORCELISTITEMPARA
+			| Extensions.HARDWRAPS
+			| Extensions.RELAXEDHRULES
+			| Extensions.SMARTS
+			| Extensions.STRIKETHROUGH
+			| Extensions.TABLES
+			| Extensions.TASKLISTITEMS;
+
 	private App() {}
 
 	/**
@@ -32,7 +49,6 @@ public final class App {
 				if(args[i].equals("-d")){
 					idxDir = i+1;
 				}
-				//System.out.println(args[i]);
 			}
 			
 			if(idxDir>0){
@@ -57,21 +73,18 @@ public final class App {
 			if (params.isConsoleMode()) { // Command line
 				new ConsoleMode().process(params);
 			} else { // GUI
-				EventQueue.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						System.setProperty("apple.laf.useScreenMenuBar", "true");
-						System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Markdown editor");
-						UIManager.put("swing.boldMetal", Boolean.FALSE);
-						try {
-							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-						} catch (Exception e) {
-							System.err.println("error: " + e.getMessage());
-							e.printStackTrace();
-						}
-						new MainFrame();
-					}
-				});
+				EventQueue.invokeLater(() -> {
+                    System.setProperty("apple.laf.useScreenMenuBar", "true");
+                    System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Markdown editor");
+                    UIManager.put("swing.boldMetal", Boolean.FALSE);
+                    try {
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    } catch (Exception e) {
+                        System.err.println("error: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                    new MainFrame();
+                });
 			}
 		} catch (DisplayUsageException e) {
 			System.err.println(e.getMessage());

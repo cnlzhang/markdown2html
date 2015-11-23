@@ -1,12 +1,7 @@
 package com.nilhcem.md2html.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
 import java.util.Observable;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 
 /**
  * Provides the menu bar of the application.
@@ -48,12 +43,7 @@ public final class MenuBar extends Observable {
 
 		JMenuItem exit = new JMenuItem("Exit");
 		exit.setMnemonic('x');
-		exit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
+		exit.addActionListener(e -> System.exit(0));
 
 		fileMenu.add(exit);
 		return fileMenu;
@@ -73,14 +63,9 @@ public final class MenuBar extends Observable {
 
 		JMenuItem about = new JMenuItem("About");
 		about.setMnemonic('a');
-		about.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(menuBar.getParent(),
-					String.format("Extremely simple Markdown to HTML converter%nPowered by MarkdownJ%nhttps://github.com/nilhcem"),
-					"Markdown2HTML: About", JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
+		about.addActionListener(e -> JOptionPane.showMessageDialog(menuBar.getParent(),
+            String.format("Extremely simple Markdown to HTML converter%nPowered by MarkdownJ%nhttps://github.com/nilhcem"),
+            "Markdown2HTML: About", JOptionPane.INFORMATION_MESSAGE));
 
 		helpMenu.add(about);
 		return helpMenu;

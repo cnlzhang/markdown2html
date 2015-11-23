@@ -1,7 +1,7 @@
 package com.nilhcem.md2html.gui;
 
 import java.awt.Dimension;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 /**
  * Provides the main window of the application.
@@ -10,21 +10,21 @@ import javax.swing.JFrame;
  * @since 1.0
  */
 public final class MainFrame {
-	private final JFrame mainFrame = new JFrame("Markdown editor");
-	private final MenuBar menu = new MenuBar();
-	private final MainPanel panel = new MainPanel();
 
 	/**
 	 * Creates the main window and makes it visible.
 	 */
 	public MainFrame() {
-		Dimension frameSize = new Dimension(640, 440);
+		Dimension frameSize = new Dimension(900, 500);
 
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		JFrame mainFrame = new JFrame("Markdown editor");
+		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		mainFrame.setSize(frameSize);
 		mainFrame.setMinimumSize(frameSize);
 
+		MenuBar menu = new MenuBar();
 		mainFrame.setJMenuBar(menu.get());
+		MainPanel panel = new MainPanel();
 		mainFrame.getContentPane().add(panel.get());
 		mainFrame.setLocationRelativeTo(null); // Center main frame
 		mainFrame.setVisible(true);

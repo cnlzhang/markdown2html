@@ -1,6 +1,7 @@
 package com.nilhcem.md2html.gui;
 
 import javax.swing.JPanel;
+
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -16,14 +17,13 @@ public final class MainPanel {
 		"[grow,fill]"); // Row constraints
 	private final JPanel mainPanel = new JPanel(layout);
 
-	private final InputPane input = new InputPane();
-	private final PreviewPane preview = new PreviewPane();
-
 	/**
 	 * Creates the main panel, adding observer to the input and building the GUI.
 	 */
 	public MainPanel() {
 		// Add observer
+		InputPane input = new InputPane();
+		PreviewPane preview = new PreviewPane();
 		input.addObserver(preview);
 
 		// Build GUI
