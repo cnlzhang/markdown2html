@@ -64,7 +64,7 @@ public final class MenuBar extends Observable {
 		JMenuItem about = new JMenuItem("About");
 		about.setMnemonic('a');
 		about.addActionListener(e -> JOptionPane.showMessageDialog(menuBar.getParent(),
-            String.format("Extremely simple Markdown to HTML converter%nPowered by MarkdownJ%nhttps://github.com/nilhcem"),
+            String.format("Extremely simple Markdown to HTML converter%nPowered by PegDown%nhttps://github.com/wqssyq"),
             "Markdown2HTML: About", JOptionPane.INFORMATION_MESSAGE));
 
 		helpMenu.add(about);

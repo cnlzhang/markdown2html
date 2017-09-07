@@ -48,7 +48,7 @@ Includes CSS style sheet for a GitHub-like look.
 GUI Screenshot
 --------------
 
-<img src="http://nilhcem.github.com/screenshots/markdown2html.png" width="814" height="564" />
+<img src="https://raw.githubusercontent.com/wqssyq/markdown2html/master/src/main/resources/screenshot.png" width="814" height="555" />
 
 
 Versions
