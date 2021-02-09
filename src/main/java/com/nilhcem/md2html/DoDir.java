@@ -23,16 +23,16 @@ public class DoDir {
 					continue;
 				}
 				String strOutputFile = FilenameUtils.removeExtension(markdownFile) + ".html";
-				
 				File outputFile = new File(strOutputFile);
-				
 				if(outputFile.exists()){
+					System.out.println( "out put file {} already exist, try next file!" + outputFile);
 					continue;
 				}
 
 				String strErrFile = FilenameUtils.removeExtension(markdownFile) + ".err";
 				File errFile = new File(strErrFile);
-				if(outputFile.exists()){
+				if(errFile.exists()){
+					System.out.println( "error file {} already exist, try next file!" + errFile);
 					continue;
 				}
 				errFile.createNewFile();
@@ -42,15 +42,14 @@ public class DoDir {
 				try {
 					// Not tested change
 					ArgsParser ap = new ArgsParser();
-					String[] args = {""};
-					args[0] = files[i].getAbsolutePath();
+					String[] args = {markdownFile, "-out", outputFile.getAbsolutePath()};
 					ap.checkArgs(args);
 					cm.process(ap);
-					errFile.deleteOnExit();
 					System.out.println( "del errFile:" + errFile.getAbsolutePath());
 				} catch (Exception e) {
 					System.out.println( "doM2h:" + e.getMessage());
 				}
+				errFile.deleteOnExit();
 			}
 		}
 	}
